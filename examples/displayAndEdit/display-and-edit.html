@@ -1,0 +1,23 @@
+<html>
+    <header>
+        <link rel="stylesheet" href="../../src/json-core-1.0.0.css">
+        <link rel="stylesheet" href="../../src/plugins/json-simple-edtior-1.0.0.css">
+        <script src="../../src/json-core-1.0.0.js"></script>
+        <script src="../../src/plugins/json-simple-edtior-1.0.0.js"></script>
+        <script>
+            document.addEventListener('DOMContentLoaded', function() {
+                const jsonStr = '{"key1":"value1", "key2":"value2", "ojb1":{ "key3":"value3", "obj2": { "key4": "value4"} }}';
+                globalJson = JSON.parse(jsonStr);
+                buildJson(globalJson, document.getElementById("newRoot"));
+
+            }, false);
+        </script>
+    </header>
+    <body style="margin-left: 20px;">
+        Json display and Edit example:
+        <hr>
+        <div id="newRoot">
+
+        </div>
+    </body>
+</html>

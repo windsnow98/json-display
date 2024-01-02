@@ -1,0 +1,37 @@
+<html>
+    <header>
+        <link rel="stylesheet" href="../../src/json-core-1.0.0.css">
+        <script src="../../src/json-core-1.0.0.js"></script>
+        <script>
+            
+            fieldsToHide = new Set(['key2']);
+
+            fieldsToUpdate = new Map([
+                ['key1', function(name, value) {
+                    return "@12345";
+                }],
+                ['key3', function(name, value) {
+                    return "<a href='http://www.google.com/?name=value'>" + value +"</a>"
+                }]
+            ]);
+
+            document.addEventListener('DOMContentLoaded', function() {
+                const jsonStr = '{"key1":"value1", "key2":"value2", "ojb1":{ "key3":"value3", "obj2": { "key4": "value4"} }}';        
+                buildJson(JSON.parse(jsonStr), document.getElementById("newRoot"));
+            }, false);
+            
+        </script>
+    </header>
+    <body style="margin-left: 20px;">
+        Custom Display Json:
+        <ul>
+            <li> update key1's value from value1 to @12345</li>
+            <li> hide key2 and the value 2</li>
+            <li> add a line to key3's value</li>
+        </ul>
+        <hr>
+        <div id="newRoot">
+
+        </div>
+    </body>
+</html>

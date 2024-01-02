@@ -1,0 +1,37 @@
+<html>
+    <header>
+        <link rel="stylesheet" href="../../src/json-core-1.0.0.css">
+        <script src="../../src/json-core-1.0.0.js"></script>
+        <script>
+            document.addEventListener('DOMContentLoaded', function() {
+                const jsonStr = '{"key1":"value1", "ojb1":{ "key2":"value2"}}';
+                buildJson(JSON.parse(jsonStr), document.getElementById("newRoot"));
+            }, false);
+        </script>
+    </header>
+    <body style="margin-left: 20px;">
+        Static html
+        <div id="jsonFormatterParsed">
+            <span class="newline">
+                <span class="expand"></span><span class="b">{</span>
+                <span class="lineContainer">
+                    "<span class="k">foo</span>":&nbsp;"<span class="s">bar</span>",
+                    <span class="newline objProp">
+                        <span class="expand"></span>"<span class="k">baz</span>":&nbsp; <span class="b">{</span>
+                        <span class="lineContainer">
+                            <span class="newline">"<span>empty array</span>":&nbsp;<span class="b">[</span>&nbsp;<span class="b">]</span>,</span>
+                            <span class="newline">"<span>empty object</span>":&nbsp;<span class="b">{</span>&nbsp;<span class="b">}</span>,</span>                            
+                        </span>    
+                    </span>
+                    <span class="b">}</span>    
+                </span>
+            </span>
+            <span class="b">}</span>
+        </div>
+        <hr>
+        Generated html
+        <div id="newRoot">
+
+        </div>
+    </body>
+</html>
