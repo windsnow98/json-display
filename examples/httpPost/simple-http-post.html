@@ -1,0 +1,61 @@
+<html>
+    <header>
+        <link rel="stylesheet" href="../../src/json-core-1.0.0.css">
+        <link rel="stylesheet" href="../../src/plugins/json-post-form-1.0.0.css">
+        <script src="../../src/json-core-1.0.0.js"></script>
+        <script src="../../src/plugins/json-post-form-1.0.0.js"></script>
+        <script>
+            document.addEventListener('DOMContentLoaded', function() {
+                const jsonStr = '{"key1":"value1", "key2":"value2", "ojb1":{ "key3":"value3", "obj2": { "key4": "value4"} }}';
+                globalJson = JSON.parse(jsonStr);
+                buildJson(globalJson, document.getElementById("newRoot"));
+
+            }, false);
+        </script>
+    </header>
+    <body style="margin-left: 20px;">
+        <div class="container">
+              <div class="row">
+                <div class="col-left">
+                  <label for="labelEndpoint">Post</label>
+                </div>
+                <div class="col-right">
+                  <input type="text" id="textEndpoint" name="endpoint" placeholder="URL..">
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-left">
+                  <label for="labelHeader">Headers</label>
+                </div>
+                <div class="col-right">
+                  <input type="text" id="textHeaders" name="header" placeholder="Headers..">
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-left">
+                  <label for="labelData">Data</label>
+                </div>
+                <div class="col-right">
+                  <textarea id="textData" name="data" placeholder="Json data.." style="height:200px"></textarea>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-left">         
+                    <label for="subject">&nbsp</label>       
+                </div>  
+                <div style="float: right;">
+                    <input type="button" value="Format JSON">
+                </div>
+                <div class="col-right">
+                    <input type="button" class="buttonBlue" value="Send" onclick="sendPostRequest('textEndpoint', 'textHeaders', 'textData')">
+                </div>
+              </div>
+        </div>
+          
+        Response: 
+        <hr>
+        <div id="newRoot">
+
+        </div>
+    </body>
+</html>
