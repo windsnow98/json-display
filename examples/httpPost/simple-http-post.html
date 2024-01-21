@@ -18,77 +18,111 @@
 
     </header>
     <body style="margin-left: 20px;">        
-        <div class="container">
-          <div class="tab">
-            <button id="defaultOpen" class="tablinks" onclick="showUI(event,'London','curlCommand','httpMethodSelect','textEndpoint', 'textHeaders', 'textData');">UI</button>
-            <button class="tablinks" onclick="showCurl(event,'Paris','curlCommand','httpMethodSelect','textEndpoint', 'textHeaders', 'textData');">curl</button>   
-          </div>
-          <!-- Tab content -->
-          <div id="London" class="tabcontent">
-
-            <div class="row">
-              <div class="col-left">
-                <select name="httpMethod" id="httpMethodSelect">
-                  <option value="GET">Get</option>
-                  <option value="POST">Post</option>
-                  <option value="PUT">Put</option>
-                  <option value="DELETE">Delete</option>
-                </select>
-              </div>
-              <div class="col-right">
-                <input type="text" id="textEndpoint" name="endpoint" placeholder="URL..">
-              </div>
-            </div>
-            <div class="row">
-              <div class="col-left">
-                <label for="labelHeader">Headers</label>
-              </div>
-              <div class="col-right">
-                <input type="text" id="textHeaders" name="header" placeholder="Headers..">
-              </div>
-            </div>
-            <div class="row">
-              <div class="col-left">
-                <label for="labelData">Data</label>
-              </div>
-              <div class="col-right">
-                <textarea id="textData" name="data" placeholder="Json data.." style="height:200px"></textarea>
-              </div>
-            </div>
-            <div class="row">
-              <div class="col-left">         
-                  <label for="subject">&nbsp</label>       
-              </div>  
-              <div style="float: right;">
-                  <input type="button" value="Format JSON">
-              </div>
-              <div class="col-right">
-                  <input type="button" class="buttonBlue" value="Send" onclick="sendHttpRequest('httpMethodSelect','textEndpoint', 'textHeaders', 'textData')">
-              </div>
-            </div>
-          </div>
-
-          <div id="Paris" class="tabcontent">
-            <div class="row">
-              <div class="col-left">
-                <label for="labelCurl">CURL</label>
-              </div>
-              <div class="col-right">
-                <textarea id="curlCommand" placeholder="curl command" style="height:200px"></textarea>
-              </div>
-            </div>
-          </div>
-
-
-        </div>
+        <table>
+            <tr valign="top">
+                <td>        
+                  <div class="container">            
+                    <div class="container-main">
+                      <div class="tab">
+                        <button id="defaultOpen" class="tablinks" onclick="showUI(event,'London','curlCommand','httpMethodSelect','textEndpoint', 'textHeaders', 'textData');">UI</button>
+                        <button class="tablinks" onclick="showCurl(event,'Paris','curlCommand','httpMethodSelect','textEndpoint', 'textHeaders', 'textData');">curl</button>   
+                        <input id="btnHistory" type="button" class="tool-button" value="History" onclick="toggleHistory();">
+                        <input id="btnAction" type="button" class="tool-button" value="Action" onclick="toggleAction();">
+                      </div>
+                      <!-- Tab content -->
+                      <div id="London" class="tabcontent">
+                        <div class="row">
+                          <div class="col-left">
+                            <select name="httpMethod" id="httpMethodSelect">
+                              <option value="GET">Get</option>
+                              <option value="POST">Post</option>
+                              <option value="PUT">Put</option>
+                              <option value="DELETE">Delete</option>
+                            </select>
+                          </div>
+                          <div class="col-right">
+                            <input type="text" id="textEndpoint" name="endpoint" placeholder="URL..">
+                          </div>
+                        </div>
+                        <div class="row">
+                          <div class="col-left">
+                            <label for="labelHeader">Headers</label>
+                          </div>
+                          <div class="col-right">
+                            <input type="text" id="textHeaders" name="header" placeholder="Headers.." spellcheck="false">
+                          </div>
+                        </div>
+                        <div class="row">
+                          <div class="col-left">
+                            <label for="labelData">Data</label>
+                          </div>
+                          <div class="col-right">
+                            <textarea id="textData" name="data" placeholder="Json data.." style="height:200px" spellcheck="false"></textarea>
+                          </div>
+                        </div>
+                        <div class="row">
+                          <div class="col-left">         
+                              <label for="subject">&nbsp</label>       
+                          </div>  
+                          <div style="float: right;">
+                              <input type="button" value="Format JSON">
+                          </div>
+                          <div class="col-right">
+                              <input type="button" class="buttonBlue" value="Send" onclick="sendHttpRequest('httpMethodSelect','textEndpoint', 'textHeaders', 'textData')">
+                          </div>
+                        </div>
+                      </div>
           
-        Response: 
+                      <div id="Paris" class="tabcontent">
+                        <div class="row">
+                          <div class="col-left">
+                            <label for="labelCurl">CURL</label>
+                          </div>
+                          <div class="col-right">
+                            <textarea id="curlCommand" placeholder="curl command" style="height:200px"></textarea>
+                          </div>
+                        </div>
+                      </div>
+                  </div>
+                </td>
+                <td style="height: 1px">
+                  <div id="containerAction" class="container-ext">
+                      Action
+                  </div>
+                </td>
+                <td style="height: 1px">
+                  <div id="containerHistory" class="container-ext">
+                      History
+                  </div>
+                </td>
+            </tr>
+        </table>
+
+        </div> 
         <hr>
+        Response: 
         <div id="newRoot">
 
         </div>
         <script>
           document.getElementById("defaultOpen").click();
+
+          function toggleHistory(){
+            document.getElementById("containerHistory").classList.toggle("container-ext-active");
+          }
+
+          function toggleAction(){
+            document.getElementById("containerAction").classList.toggle("container-ext-active");
+          }
+
+          const buttons = document.querySelectorAll('.tool-button');
+          buttons.forEach(button => {
+            button.addEventListener('click', () => {
+
+              button.classList.toggle('tool-button-active');
+              });
+          });
+
         </script>
     </body>
 </html>

@@ -4,6 +4,19 @@ function getCookie(name) {
   if (parts.length === 2) return parts.pop().split(';').shift();
 }
 
+function util_trim(str) {
+  if (str !== undefined){
+    str = str.trim();
+    if (str.charAt(0) === "'" && str.charAt(str.length-1) === "'")
+      return str.slice(1, -1);
+    else if (str.charAt(0) === '"' && str.charAt(str.length-1) === '"')
+      return str.slice(1, -1);
+    else 
+      return str;
+  }
+  return "";
+}
+
 // switch tab by click event
 function tabClick(evt, tabName) {
   var i, tabcontent, tablinks;
@@ -31,23 +44,23 @@ const newLineRegex = /\\n/gi;
 // return curl command in string
 function curlCommandBuilder(curlObj) {
   var curl = "curl";
-  if (curlObj["request"] ===undefined) {
+  if (curlObj["request"] === undefined) {
     return "";
   }
   else {
     if (curlObj["request"]["method"] !== undefined)
-      curl += " -X " + curlObj["request"]["method"] + " " + curlObj["request"]["url"];
+      curl += " -X " + curlObj["request"]["method"] + " '" + curlObj["request"]["url"] + "'";
     else
-      curl += " -X " + "GET" + " " + curlObj["request"]["url"];
+      curl += " -X " + "GET" + " '" + curlObj["request"]["url"] + "'";
   }
   if (curlObj["headers"] !== undefined) {
     var headers = curlObj["headers"];
     for(var index in headers) {
-      curl += ' -H "' + headers[index] + '"';
+      curl += " -H '" + headers[index] + "'";
     }
   }
   if (curlObj["body"] !== undefined && curlObj["body"].trim() != "") {
-      curl += " -d " + curlObj["body"];
+      curl += " -d '" + curlObj["body"] + "'";
   }
   
   return curl;
@@ -78,8 +91,7 @@ function curlCommandParser(command, parse){
         if (_each.includes('-H')) {
           let headersArr = _each.split('-H').slice(1,);
           headersArr.map(header => {
-            _header = JSON.parse(header);
-            headers.push(_header);
+            headers.push(util_trim(header));
           })
         };
       });
@@ -99,7 +111,7 @@ function curlCommandParser(command, parse){
         if (_each.includes('-d')) {
           let bodyArr = _each.split('-d').slice(1,);
           bodyArr.map(data => {
-            body = data;
+            body = util_trim(data);
           })
         };
       });
@@ -120,7 +132,7 @@ function curlCommandParser(command, parse){
           urlArr.map(url => {
             _url = url.trim().split(" ");
             object['method'] = _url[0];
-            object['url'] = _url[1];
+            object['url'] = util_trim(_url[1]);
           })
         };
       });
