@@ -76,6 +76,26 @@ input[type=text], textarea{
     background-color: lightblue;
   }
 
+  .quick-button {
+    background-color: #04AA6D;
+    color: white;
+    padding: 5px 10px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    box-shadow: 0px 1px 2px rgba(0, 0, 0, 0.5);
+    margin: 3px;
+  }
+  .quick-button:active {
+    box-shadow: 0 0 0 white;
+  }
+
+  /* selector */
+  .history-selector {
+    width: 195px;
+    margin-top: 5px;
+  }
+
   /* container and layout */
   .container {
     border-radius: 5px;

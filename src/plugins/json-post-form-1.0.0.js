@@ -1,21 +1,17 @@
-function getCookie(name) {
-  const value = `; ${document.cookie}`;
-  const parts = value.split(`; ${name}=`);
-  if (parts.length === 2) return parts.pop().split(';').shift();
+var curlHistorys = [];
+
+var restForm = {};
+
+function initForm() {
+  restForm.httpMethodSelect = document.getElementById('httpMethodSelect');
+  restForm.textEndpoint = document.getElementById('textEndpoint');
+  restForm.textHeaders = document.getElementById('textHeaders');
+  restForm.textData = document.getElementById('textData');
+  restForm.curlCommandInput = document.getElementById("curlCommand");
+  restForm.historySelector = document.getElementById("historySelector");
 }
 
-function util_trim(str) {
-  if (str !== undefined){
-    str = str.trim();
-    if (str.charAt(0) === "'" && str.charAt(str.length-1) === "'")
-      return str.slice(1, -1);
-    else if (str.charAt(0) === '"' && str.charAt(str.length-1) === '"')
-      return str.slice(1, -1);
-    else 
-      return str;
-  }
-  return "";
-}
+// *** UI events ***
 
 // switch tab by click event
 function tabClick(evt, tabName) {
@@ -31,6 +27,89 @@ function tabClick(evt, tabName) {
   document.getElementById(tabName).style.display = "block";
   evt.currentTarget.className += " active";
 }
+
+// show curl tab
+function showCurl(evt, tabName) {
+  let curlObj = uiToCurlObject();
+  let curlCmd = curlCommandBuilder(curlObj);
+  tabClick(evt, tabName);
+  restForm.curlCommandInput.value = curlCmd;
+}
+
+// show form ui tab -- this method take `textCurlCommandId`
+function showUI(evt, tabName, textCurlCommandId) {
+  var command = document.getElementById(textCurlCommandId).value;
+  
+  if (command === undefined || command === ""){
+    tabClick(evt, tabName); 
+    return;
+  }
+
+  let curlObj = commandToCurlObject(command);        
+  tabClick(evt, tabName);
+
+  setFormUiFeidls(curlObj);
+}
+
+// set element value
+function clicked_setValue(inputId, val) {
+  document.getElementById(inputId).value = val;
+}
+
+// format json data
+function clicked_formatJson() {
+  restForm.textData.value = JSON.stringify(JSON.parse(restForm.textData.value), null, 2);
+}
+
+// compact json data
+function clicked_compactJson() {
+  restForm.textData.value = JSON.stringify(JSON.parse(restForm.textData.value));
+}
+
+// create a new history
+function clicked_newHistory() {              
+  // add a new option
+  var nextIndex = curlHistorys.length+1;
+  var option = document.createElement("option");
+  option.text = "History " + nextIndex;
+  option.value = nextIndex;
+  restForm.historySelector.add(option);
+  // put existing one to history 
+  let curlObj = uiToCurlObject();
+  let curlCmd = curlCommandBuilder(curlObj);
+  curlHistorys.push(curlCmd);
+  console.log("command:" + curlCmd);                
+}
+
+function changed_selectedHistory() {
+  var newIndex = restForm.historySelector.selectedIndex;
+  var curlCommand = curlHistorys[newIndex];
+  // set on curl command ui
+  restForm.curlCommandInput.value = curlCommand; 
+  // set on UI
+  let curlObj = commandToCurlObject(curlCommand);
+  setFormUiFeidls(curlObj);
+}
+
+function setFormUiFeidls(curlObj) {
+  
+  if (curlObj["request"] !== undefined) {
+    if (curlObj["request"]["method"] !== undefined) {
+      restForm.httpMethodSelect.value = curlObj["request"]["method"];
+    }
+    if (curlObj["request"]["url"] !== undefined) {
+      restForm.textEndpoint.value = curlObj["request"]["url"];
+    }
+  }
+  if (curlObj["headers"] !== undefined) {              
+    restForm.textHeaders.value = curlObj.headers.join(";");
+  }
+  if (curlObj["body"] !== undefined && curlObj["body"].trim() != "") {
+    restForm.textData.value = curlObj.body;            
+  }
+}
+
+// *** helper methods for curl command ***
 
 const curlType = Object.freeze({
   HEADERS: 'headers',
@@ -155,16 +234,16 @@ function commandToCurlObject(command) {
 }
 
 // build curlObject from UI inputs
-function uiToCurlObject(httpMethodSelectId, urlInputId, headerInputId, dataInputId) {
+function uiToCurlObject() {
 
-  var url = document.getElementById(urlInputId).value;
-  var httpMethod = document.getElementById(httpMethodSelectId).value;
+  var url = restForm.textEndpoint.value;
+  var httpMethod = restForm.httpMethodSelect.value;
   var headers = [];
-  var headerInput = document.getElementById(headerInputId).value;
+  var headerInput = restForm.textHeaders.value;
   if (!!headerInput) {
     headers = headerInput.split(";");
   }
-  var dataInput = document.getElementById(dataInputId).value;
+  var dataInput = restForm.textData.value;
   var curlObj = {};
   curlObj["request"] =  {};
   curlObj["request"]["url"] = url;
@@ -174,69 +253,54 @@ function uiToCurlObject(httpMethodSelectId, urlInputId, headerInputId, dataInput
   return curlObj;            
 }
 
-function showCurl(evt, tabName, curlCommand, httpMethodSelect,textEndpoint, textHeaders, textData) {
-  let curlObj = uiToCurlObject(httpMethodSelect,textEndpoint, textHeaders, textData);
-  let curlCmd = curlCommandBuilder(curlObj);
-  tabClick(evt, tabName);
-  var curlCommandInput = document.getElementById(curlCommand);
-  curlCommandInput.value = curlCmd;
-}
-
-function showUI(evt, tabName, textCurlCommandId, httpMethodSelectId, urlInputId, headerInputId, dataInputId) {
-  var command = document.getElementById(textCurlCommandId).value;
-  
-  if (command === undefined || command === ""){
-    tabClick(evt, tabName); 
-    return;
-  }
-
-  let curlObj = commandToCurlObject(command);        
-  tabClick(evt, tabName);
-
-  if (curlObj["request"] !== undefined) {
-    if (curlObj["request"]["method"] !== undefined) {
-      document.getElementById(httpMethodSelectId).value = curlObj["request"]["method"];
-    }
-    if (curlObj["request"]["url"] !== undefined) {
-      document.getElementById(urlInputId).value = curlObj["request"]["url"];
-    }
-  }
-  if (curlObj["headers"] !== undefined) {              
-    document.getElementById(headerInputId).value = curlObj.headers.join(";");
-  }
-  if (curlObj["body"] !== undefined && curlObj["body"].trim() != "") {
-    document.getElementById(dataInputId).value = curlObj.body;            
-  }
-}
-
+// *** general utility ***
 function sendHttpRequest(httpMethodSelectId, urlInputId, headerInputId, dataInputId, cookieName) {
 
-    var xhr = new XMLHttpRequest();
+  var xhr = new XMLHttpRequest();
 
-    var url = document.getElementById(urlInputId).value;
-    var httpMethod = document.getElementById(httpMethodSelectId).value;
-    xhr.open(httpMethod, url, true);
+  var url = document.getElementById(urlInputId).value;
+  var httpMethod = document.getElementById(httpMethodSelectId).value;
+  xhr.open(httpMethod, url, true);
 
-    var headers = [];
-    var headerInput = document.getElementById(headerInputId).value;
-    if (!!headerInput) {
-      headers = headerInput.split(";");
+  var headers = [];
+  var headerInput = document.getElementById(headerInputId).value;
+  if (!!headerInput) {
+    headers = headerInput.split(";");
+  }
+  for(let key in headers){
+    if (!!key){
+      xhr.setRequestHeader(key, headers[key]) 
     }
-    for(let key in headers){
-      if (!!key){
-        xhr.setRequestHeader(key, headers[key]) 
-      }
-    }
-    if (!!cookieName) {
-      xhr.setRequestHeader("Authorization", "Bearer " + getCookie(cookieName));
-    }
+  }
+  if (!!cookieName) {
+    xhr.setRequestHeader("Authorization", "Bearer " + getCookie(cookieName));
+  }
 
-    var dataInput = document.getElementById(dataInputId).value;
-    xhr.send("");
-    
-    xhr.onload = function() {
-      console.log(this.responseText);
-      globalJson = JSON.parse(this.responseText);
-      buildJson(globalJson, document.getElementById("newRoot"));
-    }
+  var dataInput = document.getElementById(dataInputId).value;
+  xhr.send("");
+  
+  xhr.onload = function() {
+    console.log(this.responseText);
+    globalJson = JSON.parse(this.responseText);
+    buildJson(globalJson, document.getElementById("newRoot"));
+  }
+}
+
+function getCookie(name) {
+  const value = `; ${document.cookie}`;
+  const parts = value.split(`; ${name}=`);
+  if (parts.length === 2) return parts.pop().split(';').shift();
+}
+
+function util_trim(str) {
+  if (str !== undefined){
+    str = str.trim();
+    if (str.charAt(0) === "'" && str.charAt(str.length-1) === "'")
+      return str.slice(1, -1);
+    else if (str.charAt(0) === '"' && str.charAt(str.length-1) === '"')
+      return str.slice(1, -1);
+    else 
+      return str;
+  }
+  return "";
 }

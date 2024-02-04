@@ -3,14 +3,16 @@
         <link rel="stylesheet" href="../../src/json-core-1.0.0.css">
         <link rel="stylesheet" href="../../src/plugins/json-post-form-1.0.0.css">
         <script src="../../src/json-core-1.0.0.js"></script>
-        <script src="../../src/plugins/json-post-form-1.0.0.js"></script>
+        <script src="../../src/plugins/json-post-form-1.0.0.js"></script>        
         <script>
+
             document.addEventListener('DOMContentLoaded', function() {
                 const jsonStr = '{"key1":"value1", "key2":"value2", "ojb1":{ "key3":"value3", "obj2": { "key4": "value4"} }}';
                 globalJson = JSON.parse(jsonStr);
                 buildJson(globalJson, document.getElementById("newRoot"));
-
+                initForm();
             }, false);
+
         </script>
         <style>
 
@@ -24,8 +26,8 @@
                   <div class="container">            
                     <div class="container-main">
                       <div class="tab">
-                        <button id="defaultOpen" class="tablinks" onclick="showUI(event,'London','curlCommand','httpMethodSelect','textEndpoint', 'textHeaders', 'textData');">UI</button>
-                        <button class="tablinks" onclick="showCurl(event,'Paris','curlCommand','httpMethodSelect','textEndpoint', 'textHeaders', 'textData');">curl</button>   
+                        <button id="defaultOpen" class="tablinks" onclick="showUI(event,'London','curlCommand');">UI</button>
+                        <button class="tablinks" onclick="showCurl(event,'Paris');">curl</button>   
                         <input id="btnHistory" type="button" class="tool-button" value="History" onclick="toggleHistory();">
                         <input id="btnAction" type="button" class="tool-button" value="Action" onclick="toggleAction();">
                       </div>
@@ -65,7 +67,7 @@
                               <label for="subject">&nbsp</label>       
                           </div>  
                           <div style="float: right;">
-                              <input type="button" value="Format JSON">
+                              <input type="button" onclick="clicked_newHistory()" value="New" >
                           </div>
                           <div class="col-right">
                               <input type="button" class="buttonBlue" value="Send" onclick="sendHttpRequest('httpMethodSelect','textEndpoint', 'textHeaders', 'textData')">
@@ -86,13 +88,25 @@
                   </div>
                 </td>
                 <td style="height: 1px">
-                  <div id="containerAction" class="container-ext">
-                      Action
+                  <div id="containerAction" class="container-ext" style="padding: 5px;">
+                      <div>Action</div>
+                      <div style="margin-top: 5px;">
+                        <button class="quick-Button" onclick="clicked_setValue('textEndpoint','');">Clear URL</button>
+                        <button class="quick-Button" onclick="clicked_setValue('textEndpoint', 'http://prod.test12345.com/api/')">Prod URL</button>
+                        <button class="quick-Button" onclick="clicked_setValue('textEndpoint', 'http://staging.test12345.com/api/')">Staging URL</button>
+                        <button class="quick-Button" onclick="clicked_setValue('textHeaders','Content-Type: application/json')">Add Default Header</button>
+                        <button class="quick-Button" onclick="clicked_formatJson()">Format Json</button>
+                        <button class="quick-Button" onclick="clicked_compactJson()">Stringify Json</button>
+                      </div>
                   </div>
                 </td>
                 <td style="height: 1px">
-                  <div id="containerHistory" class="container-ext">
-                      History
+                  <div id="containerHistory" class="container-ext"  style="padding: 5px;">
+                      <div>History</div>
+                      <div>
+                        <select id="historySelector" size="10" class="history-selector" onchange="changed_selectedHistory()">                          
+                        </select>
+                      </div>    
                   </div>
                 </td>
             </tr>
