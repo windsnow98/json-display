@@ -11,6 +11,18 @@
                 globalJson = JSON.parse(jsonStr);
                 buildJson(globalJson, document.getElementById("newRoot"));
                 initForm();
+                
+                // preload collection
+                let collectionUrl = "https://raw.githubusercontent.com/windsnow98/json-display/main/examples/httpPost/collection1.txt";
+                var xhr = new XMLHttpRequest();
+                xhr.onreadystatechange = function() {
+                    if (xhr.readyState == XMLHttpRequest.DONE) {
+                        var collectionObj = processCollections(xhr.responseText);
+                        init_commandGroup(collectionObj);
+                    }
+                }
+                xhr.open('GET', collectionUrl, true);
+                xhr.send(null);
             }, false);
 
         </script>
@@ -28,6 +40,7 @@
                       <div class="tab">
                         <button id="defaultOpen" class="tablinks" onclick="showUI(event,'London','curlCommand');">UI</button>
                         <button class="tablinks" onclick="showCurl(event,'Paris');">curl</button>   
+                        <input id="btnCollection" type="button" class="tool-button" value="Collection" onclick="toggleCollection();">
                         <input id="btnHistory" type="button" class="tool-button" value="History" onclick="toggleHistory();">
                         <input id="btnAction" type="button" class="tool-button" value="Action" onclick="toggleAction();">
                       </div>
@@ -109,6 +122,21 @@
                       </div>    
                   </div>
                 </td>
+                <td style="height: 1px">
+                  <div id="containerCommandGroup" class="container-ext"  style="padding: 5px;">
+                      <div>Collection</div>
+                      <div>Group</div>
+                      <div>
+                        <select id="commandGroupSelector" size="6" class="history-selector" onchange="changed_selectedCommandGroup()">                          
+                        </select>
+                      </div>    
+                      <div>Commands</div>
+                      <div>
+                        <select id="commandSelector" size="10" class="history-selector" onchange="changed_selectedCommand()">                          
+                        </select>
+                      </div>    
+                  </div>
+                </td>                
             </tr>
         </table>
 
@@ -120,6 +148,10 @@
         </div>
         <script>
           document.getElementById("defaultOpen").click();
+
+          function toggleCollection(){
+            document.getElementById("containerCommandGroup").classList.toggle("container-ext-active");
+          }
 
           function toggleHistory(){
             document.getElementById("containerHistory").classList.toggle("container-ext-active");

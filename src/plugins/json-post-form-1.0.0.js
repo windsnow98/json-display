@@ -1,5 +1,7 @@
 var curlHistorys = [];
 
+var collectionObj = {};
+
 var restForm = {};
 
 function initForm() {
@@ -9,6 +11,8 @@ function initForm() {
   restForm.textData = document.getElementById('textData');
   restForm.curlCommandInput = document.getElementById("curlCommand");
   restForm.historySelector = document.getElementById("historySelector");
+  restForm.commandGroupSelector = document.getElementById("commandGroupSelector");
+  restForm.commandSelector = document.getElementById("commandSelector");
 }
 
 // *** UI events ***
@@ -89,6 +93,45 @@ function changed_selectedHistory() {
   // set on UI
   let curlObj = commandToCurlObject(curlCommand);
   setFormUiFeidls(curlObj);
+}
+
+function init_commandGroup(obj) {
+  collectionObj = obj;
+  var groups = collectionObj["commandGroup"];
+  for(let i = 0; i < groups.length; i++) {
+    var option = document.createElement("option");
+    option.text = groups[i];
+    option.value = i;
+    restForm.commandGroupSelector.add(option);
+  }
+}
+
+function changed_selectedCommandGroup() {
+  var newIndex = restForm.commandGroupSelector.selectedIndex;
+  var i, L = restForm.commandSelector.options.length - 1;
+  for(i = L; i >= 0; i--) {
+    restForm.commandSelector.remove(i);
+  }
+  var commandGroup = collectionObj["commandGroup"][newIndex];
+  var commands = collectionObj[commandGroup];
+  for (let i = 0; i < commands.length; i++) {
+    var option = document.createElement("option");
+    option.text = commands[i].name;
+    option.value = commands[i].curl;
+    restForm.commandSelector.add(option);
+  }
+}
+
+function changed_selectedCommand() {
+  var commandGroupIndex = restForm.commandGroupSelector.selectedIndex;  
+  var comandIndex = restForm.commandSelector.selectedIndex;
+  var commandGroup = collectionObj["commandGroup"][commandGroupIndex];
+  var curlCommand = collectionObj[commandGroup][comandIndex].curl;
+  // set on curl command ui
+  restForm.curlCommandInput.value = curlCommand; 
+  // set on UI
+  let curlObj = commandToCurlObject(curlCommand);
+  setFormUiFeidls(curlObj); 
 }
 
 function setFormUiFeidls(curlObj) {
@@ -251,6 +294,60 @@ function uiToCurlObject() {
   curlObj["headers"] =  headers;
   curlObj["body"] = dataInput;
   return curlObj;            
+}
+
+// build global collection object from text
+// text format:
+//
+// collection: DataAPI
+// name: collection A
+// 
+// collection 1
+// curl -X GET 'http://staging.test12345.com/api/1' -H 'Content-Type: application/json' -d '{"a":1}'
+//
+// collection 2
+// curl -X GET 'http://staging.test12345.com/api/2' -H 'Content-Type: application/json' -d '{"a":1}'
+// 
+// name: collection B
+//
+// collection 3
+// curl -X GET 'http://staging.test12345.com/api/1' -H 'Content-Type: application/json' -d '{"a":1}'
+//
+// 
+// collectionObj = {}
+// collectionObj[commandGroup]= ["collection A", "collection B"]
+// collectionObj["collection A""] = [ {"name": "collection 1", "curl": "... cmd ..."},  {"name": "collection 2", "curl": "... cmd ..."}]
+// collectionObj["collection B""] = [ {"name": "collection 3", "curl": "... cmd ..."} ]
+function processCollections(text) {
+  var collectionObj = {};
+  const splitLines = str => str.split(/\r?\n/);
+  var lines = splitLines(text);
+  collectionObj["commandGroup"] = [];
+  var commands = [];
+  let i = 0;
+  while (i < lines.length) {
+    var line = lines[i].trim();
+    if (line.startsWith("collection:")) {
+      collectionObj["name"] = line.replace("collection:","").trim();
+      i++;
+    } else if (line.startsWith("name:")) {                  
+      groupName = line.replace("name:","").trim();
+      collectionObj["commandGroup"].push(groupName);  
+      commands = [];
+      collectionObj[groupName] = commands;
+      i++;
+    } else if (line.length > 1) {
+      let commandObj = {};
+      commandObj.name = line;
+      i++;
+      commandObj.curl = lines[i];
+      i++;  
+      commands.push(commandObj);
+    } else {
+      i++;
+    }
+  }
+  return collectionObj;
 }
 
 // *** general utility ***
