@@ -1,0 +1,143 @@
+/* Style the tab */
+.tab {
+  overflow: hidden;
+  border: 1px solid #ccc;
+  background-color: #f1f1f1;
+}
+
+.tab button {
+  background-color: inherit;
+  float: left;
+  border: none;
+  outline: none;
+  cursor: pointer;
+  padding: 14px 16px;
+  transition: 0.3s;
+}
+
+.tab button:hover {
+  background-color: #ddd;
+}
+
+.tab button.active {
+  background-color: #ccc;
+}
+
+.tabcontent {
+  display: none;
+  padding: 6px 12px;
+  border: 1px solid #ccc;
+  border-top: none;
+}
+
+/* style rest request form */
+input[type=text], textarea{
+    width: 100%;
+    padding: 5px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;
+    resize: vertical;
+  }
+  
+  label {
+    padding: 3px 12px 12px 0;
+    display: inline-block;
+  }
+  
+  /* buttons */
+  .buttonBlue {
+    background-color: #04AA6D;
+    color: white;
+    padding: 5px 20px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+  }
+  
+  .tool-button {
+    position: relative;
+    padding: 5px 20px;
+    border: 0;
+    border-radius: 0.05em;
+    background-color: lightgray;
+    box-shadow: 0px 1px 2px rgba(0, 0, 0, 0.5);
+    cursor: pointer;
+    margin-top: 5px;
+    margin-right: 5px;
+    float: right; 
+  }
+  
+  .tool-button:active, 
+  .tool-button-active {
+    top: 2px;
+    left: 1px;
+    box-shadow: none;
+    background-color: lightblue;
+  }
+
+
+  /* selector */
+  .history-selector {
+    width: 195px;
+    margin-top: 5px;
+  }
+
+  /* container and layout */
+  .container {
+    border-radius: 5px;
+    background-color: #f2f2f2;
+    padding: 5px;
+    resize: both;
+    overflow: auto;
+  }
+
+  .container-main {
+    float: left; 
+    width: 800px; 
+    overflow: auto;
+  }
+  
+  .container-ext {
+    border-radius: 5px;    
+    width: 200px;
+    display: none;
+    background-color: lightgoldenrodyellow; 
+    height: 100%;
+  }
+
+  .container-ext-active {
+    display: block;
+  }
+
+  .col-left {
+    float: left;
+    width: 90px;
+    margin-top: 0px;
+  }
+  
+  .col-right {
+    margin-top: 6px;
+    margin-left: 100px;
+  }
+  
+  .row:after {
+    content: "";
+    display: table;
+    clear: both;
+  }
+
+  .quick-Button {
+    background-color: #04AA6D;
+    color: white;
+    padding: 5px 10px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    box-shadow: 0px 1px 2px rgba(0, 0, 0, 0.5);
+    margin: 3px;
+  }  
+
+  .quick-Button:active {
+    box-shadow: 0 0 0 white;
+  }

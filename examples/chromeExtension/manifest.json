@@ -1,0 +1,23 @@
+{
+    "name": "my-rest-tool",
+    "version": "0.1.1",
+    "manifest_version": 3,
+    "background": {
+        "service_worker": "bg.js"
+    },
+    "content_scripts": [
+        {
+            "matches": ["http://127.0.0.1:5500/*"],
+            "css": ["content.css", "lib/json-core-1.0.0.css", "lib/json-post-form-1.0.0.css"],
+            "js": ["content.js"]
+        }
+    ],
+    "web_accessible_resources": [ {
+        "resources": ["templates.html","lib/json-core-1.0.0.js", "lib/json-post-form-1.0.0.js", "lib/page.js", "lib/json-core-1.0.0.css", "lib/json-post-form-1.0.0.css"],
+        "matches": ["http://127.0.0.1:5500/*"]
+      }],
+    "action": {
+        "default_popup": "popup.html"
+    },
+    "permissions": ["scripting", "tabs", "webRequest", "activeTab"]
+}
