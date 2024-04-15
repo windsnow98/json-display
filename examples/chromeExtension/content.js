@@ -16,42 +16,29 @@ const scriptFormJs = document.createElement("script");
 scriptFormJs.setAttribute("src", formJsUrl);
 document.head.appendChild(scriptFormJs);
 
-/*
-const coreCssUrl = chrome.runtime.getURL("lib/json-core-1.0.0.css");
-const scriptCoreCss = document.createElement("link");
-scriptCoreCss.setAttribute("href", coreCssUrl);
-scriptCoreCss.setAttribute("rel", "stylesheet");
-scriptCoreCss.setAttribute("type", "text/css");
-document.head.appendChild(scriptCoreCss);
+var port = chrome.runtime.connect({name: "content-to-bg"});
+port.postMessage({task: "load-template"});
 
-const formCssUrl = chrome.runtime.getURL("lib/json-post-form-1.0.0.css");
-const scriptFormCss = document.createElement("link");
-scriptFormCss.setAttribute("href", formCssUrl);
-scriptFormCss.setAttribute("rel", "stylesheet");
-scriptFormCss.setAttribute("type", "text/css");
-document.head.appendChild(scriptFormCss);
-*/
-
-async function init() {
-    console.log("content script sending");
-    const response = await chrome.runtime.sendMessage({greeting: "hello"});
-    // do something with response here, not outside the function    
-    console.log(response.html);
-    document.body.innerHTML = response.html;
-}
-
-init();
-
-function start() {
+async function start() {    
     const pageUrl = chrome.runtime.getURL("lib/page.js");
     const scriptPageJs = document.createElement("script");
     scriptPageJs.setAttribute("src", pageUrl);
     document.head.appendChild(scriptPageJs);
 }
 
-setTimeout(() => {
-    console.log("delay 2 second to start")
-    start();    
-}, 500);
+// setTimeout(() => {
+//     console.log("delay 2 second to start")
+//     start();    
+// }, 500);
 
+port.onMessage.addListener(function(msg) {
+    if (msg.task === "load-template") {    
+        document.body.innerHTML = msg.result;
+        start();
+    } else if (msg.task === "http-get") {
+        console.log(msg.result);
+        var collectionObj = processCollections(msg.result);
+        init_commandGroup(collectionObj);
+    }
+});
 

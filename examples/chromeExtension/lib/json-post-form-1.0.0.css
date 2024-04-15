@@ -31,19 +31,19 @@
 }
 
 /* style rest request form */
-input[type=text], textarea{
-    width: 100%;
-    padding: 5px;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-    box-sizing: border-box;
-    resize: vertical;
-  }
+input[type=text], textarea {
+  width: 100%;
+  padding: 5px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  box-sizing: border-box;
+  resize: vertical;
+}
   
-  label {
-    padding: 3px 12px 12px 0;
-    display: inline-block;
-  }
+label {
+  padding: 3px 12px 12px 0;
+  display: inline-block;
+}
   
   /* buttons */
   .buttonBlue {

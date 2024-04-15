@@ -382,6 +382,7 @@ function sendHttpRequest(httpMethodSelectId, urlInputId, headerInputId, dataInpu
   
   xhr.onload = function() {
     console.log(this.responseText);
+    console.log("response text: " + this.responseText);
     globalJson = JSON.parse(this.responseText);
     buildJson(globalJson, document.getElementById("newRoot"));
   }

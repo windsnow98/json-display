@@ -1,6 +1,7 @@
 Todo:
 
-- get collection in bg.js
+- Test get/put/post/delete (tested get)
+- Hookup with display reponse display json (seems work, need to check top level)
+- Hookup timestamp display, String extra types
 
-- make http request in bg.js
 
