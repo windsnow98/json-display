@@ -1,69 +1,96 @@
-<div>
+<div style="float: right">
+    <div>
+        <button id="btnPostForm" class="menuButton" type="button" onclick="toggle('btnPostForm', 'menuButton', 'btnPostForm', 'menuButton-disable', 'requestTool','requestTool-active')">Request</button>
+    </div>
+</div>
+<div id="requestTool" class="requestTool">
     <table>
         <tr valign="top">
             <td>        
                 <div class="container">            
                 <div class="container-main">
                     <div class="tab">
-                    <button id="defaultOpen" class="tablinks" onclick="showUI(event,'London','curlCommand');">UI</button>
-                    <button class="tablinks" onclick="showCurl(event,'Paris');">curl</button>   
-                    <input id="btnCollection" type="button" class="tool-button" value="Collection" onclick="toggleCollection();">
-                    <input id="btnHistory" type="button" class="tool-button" value="History" onclick="toggleHistory();">
-                    <input id="btnAction" type="button" class="tool-button" value="Action" onclick="toggleAction();">
+                        <button id="defaultOpen" class="tablinks" onclick="showUI(event,'London','curlCommand');">UI</button>
+                        <button class="tablinks" onclick="showCurl(event,'Paris');">curl</button>   
+                        <button class="tablinks" onclick="showSetting(event,'tabSetting');">setting</button>   
+                        <input id="btnCollection" type="button" class="tool-button" value="Collection" onclick="toggleCollection();">
+                        <input id="btnHistory" type="button" class="tool-button" value="History" onclick="toggleHistory();">
+                        <input id="btnAction" type="button" class="tool-button" value="Action" onclick="toggleAction();">
                     </div>
-                    <!-- Tab content -->
+                    <!-- Tab content 1 -->
                     <div id="London" class="tabcontent">
-                    <div class="row">
-                        <div class="col-left">
-                        <select name="httpMethod" id="httpMethodSelect">
-                            <option value="GET">Get</option>
-                            <option value="POST">Post</option>
-                            <option value="PUT">Put</option>
-                            <option value="DELETE">Delete</option>
-                        </select>
+                        <div class="row">
+                            <div class="col-left">
+                                <select name="httpMethod" id="httpMethodSelect">
+                                    <option value="GET">Get</option>
+                                    <option value="POST">Post</option>
+                                    <option value="PUT">Put</option>
+                                    <option value="DELETE">Delete</option>
+                                </select>
+                            </div>
+                            <div class="col-right">
+                                <input type="text" id="textEndpoint" name="endpoint" placeholder="URL..">
+                            </div>
                         </div>
-                        <div class="col-right">
-                        <input type="text" id="textEndpoint" name="endpoint" placeholder="URL..">
+                        <div class="row">
+                            <div class="col-left">
+                                <label for="labelHeader">Headers</label>
+                            </div>
+                            <div class="col-right">
+                                <input type="text" id="textHeaders" name="header" placeholder="Headers.." spellcheck="false">
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-left">
+                                <label for="labelData">Data</label>
+                            </div>
+                            <div class="col-right">
+                                <textarea id="textData" name="data" placeholder="Json data.." style="height:200px" spellcheck="false"></textarea>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-left">         
+                                <label for="subject">&nbsp</label>       
+                            </div>  
+                            <div style="float: right;">
+                                <input type="button" onclick="clicked_newHistory()" value="New" >
+                            </div>
+                            <div class="col-right">
+                                <input type="button" class="buttonBlue" value="Send" onclick="sendHttpRequest('httpMethodSelect','textEndpoint', 'textHeaders', 'textData')">
+                            </div>
                         </div>
                     </div>
-                    <div class="row">
-                        <div class="col-left">
-                        <label for="labelHeader">Headers</label>
-                        </div>
-                        <div class="col-right">
-                        <input type="text" id="textHeaders" name="header" placeholder="Headers.." spellcheck="false">
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-left">
-                        <label for="labelData">Data</label>
-                        </div>
-                        <div class="col-right">
-                        <textarea id="textData" name="data" placeholder="Json data.." style="height:200px" spellcheck="false"></textarea>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-left">         
-                            <label for="subject">&nbsp</label>       
-                        </div>  
-                        <div style="float: right;">
-                            <input type="button" onclick="clicked_newHistory()" value="New" >
-                        </div>
-                        <div class="col-right">
-                            <input type="button" class="buttonBlue" value="Send" onclick="sendHttpRequest('httpMethodSelect','textEndpoint', 'textHeaders', 'textData')">
-                        </div>
-                    </div>
-                    </div>
-        
+                    <!-- Tab content 2 -->
                     <div id="Paris" class="tabcontent">
                     <div class="row">
                         <div class="col-left">
-                        <label for="labelCurl">CURL</label>
+                            <label for="labelCurl">CURL</label>
                         </div>
                         <div class="col-right">
-                        <textarea id="curlCommand" placeholder="curl command" style="height:200px"></textarea>
+                            <textarea id="curlCommand" placeholder="curl command" style="height:200px"></textarea>
                         </div>
                     </div>
+                    </div>
+                    <!-- Tab content 3 -->
+                    <div id="tabSetting" class="tabcontent">
+                        <div class="row">
+                            <div class="col-left">
+                                <label for="labelCollection">Collection</label>
+                            </div>
+                            <div class="col-right">
+                                <input id="collectionInput" type="text" onclick="" value="https://raw.githubusercontent.com/windsnow98/json-display/main/examples/httpPost/collection1.txt" style="display: inline; width: 600px;"> 
+                                <input type="button" onclick="loadCollection()" value="load" style="display: inline;">
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-left">
+                                <label for="labelCookie">Cookie</label>
+                            </div>
+                            <div class="col-right">
+                                <input id="cookieInput" type="text" onclick="" value="" style="display: inline; width: 600px;"> 
+                                <input type="checkbox" value="load" style="display: inline;">
+                            </div>
+                        </div>    
                     </div>
                 </div>
             </td>
@@ -71,12 +98,12 @@
                 <div id="containerAction" class="container-ext" style="padding: 5px;">
                     <div>Action</div>
                     <div style="margin-top: 5px;">
-                    <button class="quick-Button" onclick="clicked_setValue('textEndpoint','');">Clear URL</button>
-                    <button class="quick-Button" onclick="clicked_setValue('textEndpoint', 'http://prod.test12345.com/api/')">Prod URL</button>
-                    <button class="quick-Button" onclick="clicked_setValue('textEndpoint', 'http://staging.test12345.com/api/')">Staging URL</button>
-                    <button class="quick-Button" onclick="clicked_setValue('textHeaders','Content-Type: application/json')">Add Default Header</button>
-                    <button class="quick-Button" onclick="clicked_formatJson()">Format Json</button>
-                    <button class="quick-Button" onclick="clicked_compactJson()">Stringify Json</button>
+                        <button class="quick-Button" onclick="clicked_setValue('textEndpoint','');">Clear URL</button>
+                        <button class="quick-Button" onclick="clicked_setValue('textEndpoint', 'http://prod.test12345.com/api/')">Prod URL</button>
+                        <button class="quick-Button" onclick="clicked_setValue('textEndpoint', 'http://staging.test12345.com/api/')">Staging URL</button>
+                        <button class="quick-Button" onclick="clicked_setValue('textHeaders','Content-Type: application/json')">Add Default Header</button>
+                        <button class="quick-Button" onclick="clicked_formatJson()">Format Json</button>
+                        <button class="quick-Button" onclick="clicked_compactJson()">Stringify Json</button>
                     </div>
                 </div>
             </td>
@@ -84,8 +111,7 @@
                 <div id="containerHistory" class="container-ext"  style="padding: 5px;">
                     <div>History</div>
                     <div>
-                    <select id="historySelector" size="10" class="history-selector" onchange="changed_selectedHistory()">                          
-                    </select>
+                        <select id="historySelector" size="10" class="history-selector" onchange="changed_selectedHistory()"></select>
                     </div>    
                 </div>
             </td>
@@ -94,13 +120,11 @@
                     <div>Collection</div>
                     <div>Group</div>
                     <div>
-                    <select id="commandGroupSelector" size="6" class="history-selector" onchange="changed_selectedCommandGroup()">                          
-                    </select>
+                        <select id="commandGroupSelector" size="6" class="history-selector" onchange="changed_selectedCommandGroup()"></select>
                     </div>    
                     <div>Commands</div>
                     <div>
-                    <select id="commandSelector" size="10" class="history-selector" onchange="changed_selectedCommand()">                          
-                    </select>
+                        <select id="commandSelector" size="10" class="history-selector" onchange="changed_selectedCommand()"></select>
                     </div>    
                 </div>
             </td>                

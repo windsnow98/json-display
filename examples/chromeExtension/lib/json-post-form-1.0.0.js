@@ -36,6 +36,11 @@ function tabClick(evt, tabName) {
   evt.currentTarget.className += " active";
 }
 
+// show setting
+function showSetting(evt, tabName) {
+  tabClick(evt, tabName);
+}
+
 // show curl tab
 function showCurl(evt, tabName) {
   let curlObj = uiToCurlObject();
@@ -370,15 +375,20 @@ function sendHttpRequest(httpMethodSelectId, urlInputId, headerInputId, dataInpu
   }
   for(let key in headers){
     if (!!key){
-      xhr.setRequestHeader(key, headers[key]) 
+      var parts = headers[key].split(":");
+      xhr.setRequestHeader(parts[0].trim(), parts[1].trim()) 
     }
   }
   if (!!cookieName) {
     xhr.setRequestHeader("Authorization", "Bearer " + getCookie(cookieName));
   }
-
-  var dataInput = document.getElementById(dataInputId).value;
-  xhr.send("");
+  
+  if (httpMethod === "get") {
+    xhr.send("");
+  } else {
+    var dataInput = document.getElementById(dataInputId).value;
+    xhr.send(dataInput);
+  }
   
   xhr.onload = function() {
     console.log(this.responseText);

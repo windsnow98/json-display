@@ -29,13 +29,32 @@ buttons.forEach(button => {
     });
 });
 
-let collectionUrl = "https://raw.githubusercontent.com/windsnow98/json-display/main/examples/httpPost/collection1.txt";
-var xhr = new XMLHttpRequest();
-xhr.onreadystatechange = function() {
-    if (xhr.readyState == XMLHttpRequest.DONE) {
-        var collectionObj = processCollections(xhr.responseText);
-        init_commandGroup(collectionObj);
-    }
+function toggle(id, className, id2, className2, id3, className3) {
+  document.getElementById(id).classList.toggle(className);
+  if (id2 && className2) {
+    document.getElementById(id2).classList.toggle(className2);
+  }
+  if (id3 && className3) {
+    document.getElementById(id3).classList.toggle(className3);
+  }
 }
-xhr.open('GET', collectionUrl, true);
-xhr.send(null);
+
+function loadCollection() {
+  let collectionUrl = document.getElementById("collectionInput").value;
+  var xhr = new XMLHttpRequest();
+  xhr.onreadystatechange = function() {
+      if (xhr.readyState == XMLHttpRequest.DONE) {
+          var collectionObj = processCollections(xhr.responseText);
+          init_commandGroup(collectionObj);
+      }
+  }
+  xhr.open('GET', collectionUrl, true);
+  xhr.send(null);
+}
+
+shouldLoadCollection = false;
+
+if (shouldLoadCollection) {
+  loadCollection();
+  //let collectionUrl = "https://raw.githubusercontent.com/windsnow98/json-display/main/examples/httpPost/collection1.txt";
+}

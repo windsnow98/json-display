@@ -142,7 +142,11 @@ function buildKeyValueSpans(key, val, path, idx) {
         spans.push(spanT1);                    
     } else if (typeof val === "number") {
         const spanT1 = document.createElement("span");            
-        spanT1.innerHTML = val;
+        var dateTimeStr = "";
+        if (val > 1700000000000 && val < 1800000000000) {
+            dateTimeStr = " (" + new Date(val).toLocaleString() + ")";
+        }
+        spanT1.innerHTML = val + dateTimeStr;
         spans.push(spanT1);
     } else if (typeof val === "string") {
         const spanT1 = document.createElement("span");            

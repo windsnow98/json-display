@@ -1,6 +1,5 @@
 Todo:
 
-- Test get/put/post/delete (tested get)
 - Hookup with display reponse display json (seems work, need to check top level)
 - Hookup timestamp display, String extra types
 
