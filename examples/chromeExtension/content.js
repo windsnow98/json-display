@@ -1,11 +1,5 @@
 console.log("hello content.js v.05")
 
-/*
-const jsonStr = '{"key1":"value1", "ojb1":{ "key2":"value2"}}';
-document.body.innerHTML = '<div id="newRoot"></div>';
-buildJson(JSON.parse(jsonStr), document.getElementById("newRoot"));
-*/
-
 const coreJsUrl = chrome.runtime.getURL("lib/json-core-1.0.0.js");
 const scriptCoreJs = document.createElement("script");
 scriptCoreJs.setAttribute("src", coreJsUrl);
@@ -33,7 +27,8 @@ async function start() {
 
 port.onMessage.addListener(function(msg) {
     if (msg.task === "load-template") {    
-        document.body.innerHTML = msg.result;
+        var json = document.getElementsByTagName("pre")[0].innerHTML;        
+        document.body.innerHTML = msg.result + "<div id='divJson' style='display:none'>" + json + "</div>";
         start();
     } else if (msg.task === "http-get") {
         console.log(msg.result);

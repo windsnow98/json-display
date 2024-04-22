@@ -58,3 +58,11 @@ if (shouldLoadCollection) {
   loadCollection();
   //let collectionUrl = "https://raw.githubusercontent.com/windsnow98/json-display/main/examples/httpPost/collection1.txt";
 }
+
+try {
+  var json = document.getElementById("divJson").innerHTML;
+  globalJson = JSON.parse(json);
+  buildJson(globalJson, document.getElementById("newRoot"));
+} catch (e) {
+  console.log("invalid json: " + json);
+}
